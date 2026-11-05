@@ -37,7 +37,7 @@ pnpm create vanilla-vite@latest
 npm create vanilla-vite@latest
 ```
 
-The generator starts the official `create-vite@latest` wizard in `my-app-client`. Choose **React** for a React application, then select JavaScript or TypeScript. You can instead choose any other template offered by Vite. Afterward, choose whether to add a backend (frontend-only is the default). The frontend wizard may install dependencies temporarily; the generator removes nested install files and Git metadata, configures one shared workspace, and installs all dependencies from the project root.
+The generator starts the official `create-vite@latest` wizard in `my-app-client`. Choose **React** for a React application, then select JavaScript or TypeScript. You can instead choose any other template offered by Vite. Afterward, choose whether to install Tailwind CSS v4 and Axios. For React templates, you can also choose React Icons, `@animateicons/react`, or no icon library. These options default to **No**. The generator then asks whether to add a backend (frontend-only is the default). The frontend wizard may install dependencies temporarily; the generator removes nested install files and Git metadata, configures one shared workspace, and installs all dependencies from the project root.
 
 The optional backend supports JavaScript or TypeScript, either basic Node.js or Express, and a simple or module-based folder layout. Both layouts create the `src/app` and `src/server` entry points. The simple layout has `routes`, `controllers`, `middleware`, and `config` folders; the module-based layout has `module`, `config`, `middleware`, and `utils` folders plus `mainRouter`. Express adds Express and dotenv, enables JSON parsing, and provides `GET /api/health`, returning `{ "status": "ok" }`.
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import spawn from "cross-spawn";
 import { emitKeypressEvents } from "node:readline";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const args = process.argv.slice(2);
@@ -159,6 +159,102 @@ async function selectOption(question, options, defaultIndex = 0) {
     stdin.on("keypress", onKeypress);
     render();
   });
+}
+
+async function configureTailwind(clientRoot) {
+  const viteConfigName = (await readdir(clientRoot)).find((file) =>
+    /^vite\.config\.(?:[cm]?[jt]s)$/.test(file),
+  );
+  if (!viteConfigName) {
+    throw new Error("Could not find the Vite config to configure Tailwind CSS.");
+  }
+
+  const viteConfigPath = join(clientRoot, viteConfigName);
+  let viteConfig = await readFile(viteConfigPath, "utf8");
+  if (!viteConfig.includes("@tailwindcss/vite")) {
+    viteConfig = `import tailwindcss from "@tailwindcss/vite";\n${viteConfig}`;
+    const plugins = /(\bplugins\s*:\s*\[)/;
+    if (plugins.test(viteConfig)) {
+      viteConfig = viteConfig.replace(plugins, "$1tailwindcss(), ");
+    } else {
+      const configObject = /(\bdefineConfig\s*\(\s*\{)/;
+      if (!configObject.test(viteConfig)) {
+        throw new Error("Could not add Tailwind CSS to the Vite config.");
+      }
+      viteConfig = viteConfig.replace(configObject, "$1\n  plugins: [tailwindcss()],");
+    }
+  }
+  await writeFile(viteConfigPath, viteConfig);
+
+  let entryPath;
+  for (const directory of [join(clientRoot, "src"), clientRoot]) {
+    let files;
+    try {
+      files = await readdir(directory);
+    } catch (error) {
+      if (error.code === "ENOENT") continue;
+      throw error;
+    }
+    const entryFile = files.find((file) => /^main\.[cm]?[jt]sx?$/.test(file));
+    if (entryFile) {
+      entryPath = join(directory, entryFile);
+      break;
+    }
+  }
+  if (!entryPath) {
+    throw new Error("Could not find the frontend entry file to configure Tailwind CSS.");
+  }
+  const entry = await readFile(entryPath, "utf8");
+  const cssImport = entry.match(/import\s+["']([^"']+\.css)["']/);
+  if (!cssImport) {
+    throw new Error("Could not find a CSS import to configure Tailwind CSS.");
+  }
+  const cssPath = resolve(dirname(entryPath), cssImport[1]);
+  const css = await readFile(cssPath, "utf8");
+  if (!css.includes('@import "tailwindcss";')) {
+    await writeFile(cssPath, `@import "tailwindcss";\n${css}`);
+  }
+}
+
+async function configureFrontend(clientRoot, clientPackage) {
+  const tailwind = await selectOption("Would you like to install Tailwind CSS?", [
+    { label: "Yes — add Tailwind CSS v4", value: true },
+    { label: "No (default)", value: false },
+  ], 1);
+  const axios = await selectOption("Would you like to install Axios?", [
+    { label: "Yes — add Axios", value: true },
+    { label: "No (default)", value: false },
+  ], 1);
+  const isReact = Boolean(
+    clientPackage.dependencies?.react || clientPackage.devDependencies?.react,
+  );
+  const installIcons =
+    isReact &&
+    (await selectOption("Would you like to install an icon library?", [
+      { label: "Yes", value: true },
+      { label: "No (default)", value: false },
+    ], 1));
+  const icons = installIcons
+    ? await selectOption("Which React icon library would you like to install?", [
+        { label: "React Icons (default)", value: ["react-icons", "^5.7.0"] },
+        { label: "@animateicons/react", value: ["@animateicons/react", "^0.13.0"] },
+      ])
+    : null;
+
+  if (tailwind) {
+    clientPackage.devDependencies ??= {};
+    clientPackage.devDependencies["@tailwindcss/vite"] = "^4.3.4";
+    clientPackage.devDependencies.tailwindcss = "^4.3.4";
+    await configureTailwind(clientRoot);
+  }
+  if (axios) {
+    clientPackage.dependencies ??= {};
+    clientPackage.dependencies.axios = "^1.21.0";
+  }
+  if (icons) {
+    clientPackage.dependencies ??= {};
+    clientPackage.dependencies[icons[0]] = icons[1];
+  }
 }
 
 async function copyScript(name) {
@@ -366,6 +462,7 @@ try {
   const clientPackage = JSON.parse(await readFile(clientPackagePath, "utf8"));
   clientPackage.scripts ??= {};
   clientPackage.scripts.start ??= clientPackage.scripts.dev;
+  await configureFrontend(clientRoot, clientPackage);
   await writeFile(clientPackagePath, `${JSON.stringify(clientPackage, null, 2)}\n`);
   await writeFile(
     join(clientRoot, ".env.local"),

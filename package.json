@@ -1,18 +1,18 @@
 {
-  "name": "create-vanilla-react",
+  "name": "create-vanilla-vite",
   "version": "1.0.0",
   "description": "Scaffold a React or Vite app with an optional Node.js or Express backend",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wasib-2005/vanilla-react.git"
+    "url": "git+https://github.com/Wasib-2005/vanilla-vite.git"
   },
-  "homepage": "https://github.com/Wasib-2005/vanilla-react#readme",
+  "homepage": "https://github.com/Wasib-2005/vanilla-vite#readme",
   "bugs": {
-    "url": "https://github.com/Wasib-2005/vanilla-react/issues"
+    "url": "https://github.com/Wasib-2005/vanilla-vite/issues"
   },
   "bin": {
-    "create-vanilla-react": "./bin/create-template.mjs"
+    "create-vanilla-vite": "./bin/create-template.mjs"
   },
   "files": [
     "bin/",

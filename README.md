@@ -1,12 +1,12 @@
-# Vanilla React
+# Vanilla Vite
 
-Create a React app with Vite, or choose another Vite template in the official interactive setup. Optionally add a Node.js or Express backend in the same npm or pnpm workspace.
+Create a Vite app with the official interactive setup. Choose React or any other offered template, and optionally add a Node.js or Express backend in the same npm or pnpm workspace.
 
-[![npm version](https://img.shields.io/npm/v/create-vanilla-react)](https://www.npmjs.com/package/create-vanilla-react)
-[![npm downloads](https://img.shields.io/npm/dm/create-vanilla-react)](https://www.npmjs.com/package/create-vanilla-react)
-[![GitHub repository](https://img.shields.io/badge/GitHub-Wasib--2005%2Fvanilla--react-181717?logo=github)](https://github.com/Wasib-2005/vanilla-react)
+[![npm version](https://img.shields.io/npm/v/create-vanilla-vite)](https://www.npmjs.com/package/create-vanilla-vite)
+[![npm downloads](https://img.shields.io/npm/dm/create-vanilla-vite)](https://www.npmjs.com/package/create-vanilla-vite)
+[![GitHub repository](https://img.shields.io/badge/GitHub-Wasib--2005%2Fvanilla--vite-181717?logo=github)](https://github.com/Wasib-2005/vanilla-vite)
 
-**Links:** [npm package](https://www.npmjs.com/package/create-vanilla-react) · [GitHub repository](https://github.com/Wasib-2005/vanilla-react) · [Report an issue](https://github.com/Wasib-2005/vanilla-react/issues)
+**Links:** [npm package](https://www.npmjs.com/package/create-vanilla-vite) · [GitHub repository](https://github.com/Wasib-2005/vanilla-vite) · [Report an issue](https://github.com/Wasib-2005/vanilla-vite/issues)
 
 ## Requirements
 
@@ -18,21 +18,21 @@ Create a React app with Vite, or choose another Vite template in the official in
 With pnpm:
 
 ```bash
-pnpm create vanilla-react@latest my-app
+pnpm create vanilla-vite@latest my-app
 ```
 
 With npm:
 
 ```bash
-npm create vanilla-react@latest my-app
+npm create vanilla-vite@latest my-app
 ```
 
 Omit the project name to enter it when prompted:
 
 ```bash
-pnpm create vanilla-react@latest
+pnpm create vanilla-vite@latest
 # or
-npm create vanilla-react@latest
+npm create vanilla-vite@latest
 ```
 
 The generator starts the official `create-vite@latest` wizard in `my-app-client`. Choose **React** for a React application, then select JavaScript or TypeScript. You can instead choose any other template offered by Vite. Afterward, choose whether to add a backend (frontend-only is the default). The frontend wizard may install dependencies temporarily; the generator removes nested install files and Git metadata, configures one shared workspace, and installs all dependencies from the project root.
@@ -42,8 +42,8 @@ The optional backend supports JavaScript or TypeScript, either basic Node.js or 
 Pass `--default` after the project name to use the simple backend folder layout without prompting:
 
 ```bash
-pnpm create vanilla-react@latest my-app --default
-npm create vanilla-react@latest my-app --default
+pnpm create vanilla-vite@latest my-app --default
+npm create vanilla-vite@latest my-app --default
 ```
 
 The generated project structure is:

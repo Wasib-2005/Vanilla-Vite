@@ -28,7 +28,7 @@ if (!projectName && stdin.isTTY) {
 }
 
 if (!projectName || !validProjectName(projectName)) {
-  console.error("Usage: create-vanilla-react <lowercase-project-name>");
+  console.error("Usage: create-vanilla-vite <lowercase-project-name>");
   if (!projectName && !stdin.isTTY) {
     console.error("Run this command in an interactive terminal to be prompted for a name.");
   }
@@ -53,7 +53,7 @@ async function updateIfOutdated() {
 
   let latestVersion;
   try {
-    const response = await fetch(`${registry}/create-vanilla-react/latest`, {
+    const response = await fetch(`${registry}/create-vanilla-vite/latest`, {
       signal: AbortSignal.timeout(3000),
     });
     if (!response.ok) throw new Error(`registry returned HTTP ${response.status}`);
@@ -69,13 +69,13 @@ async function updateIfOutdated() {
   if (installedVersion === latestVersion) return;
   if (!stdin.isTTY) {
     console.warn(
-      `\nA newer version of create-vanilla-react is available (${latestVersion}; current: ${installedVersion}). Run ${packageManager} create vanilla-react@latest to use it.`,
+      `\nA newer version of create-vanilla-vite is available (${latestVersion}; current: ${installedVersion}). Run ${packageManager} create vanilla-vite@latest to use it.`,
     );
     return;
   }
 
   console.warn(
-    `\nA newer version of create-vanilla-react is available (${latestVersion}; current: ${installedVersion}).`,
+    `\nA newer version of create-vanilla-vite is available (${latestVersion}; current: ${installedVersion}).`,
   );
   const useLatest = await selectOption("Which version would you like to use?", [
     { label: `Use the latest version (${latestVersion})`, value: true },
@@ -85,13 +85,13 @@ async function updateIfOutdated() {
 
   const updateArgs =
     packageManager === "pnpm"
-      ? ["dlx", "create-vanilla-react@latest", ...args]
+      ? ["dlx", "create-vanilla-vite@latest", ...args]
       : [
           "exec",
           "--yes",
-          "--package=create-vanilla-react@latest",
+          "--package=create-vanilla-vite@latest",
           "--",
-          "create-vanilla-react",
+          "create-vanilla-vite",
           ...args,
         ];
   try {

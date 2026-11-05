@@ -1,6 +1,6 @@
 {
   "name": "create-vanilla-vite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scaffold a React or Vite app with an optional Node.js or Express backend",
   "type": "module",
   "repository": {
@@ -42,5 +42,8 @@
     "javascript",
     "cli"
   ],
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cross-spawn": "^7.0.6"
+  }
 }

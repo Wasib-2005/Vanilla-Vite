@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { spawn } from "node:child_process";
+import spawn from "cross-spawn";
 import { emitKeypressEvents } from "node:readline";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
@@ -43,11 +43,12 @@ const clientFolder = `${projectName}-client`;
 const serverFolder = `${projectName}-server`;
 const packageRoot = fileURLToPath(new URL("../", import.meta.url));
 const scriptRoot = fileURLToPath(new URL("../scripts/", import.meta.url));
+const cliPackage = JSON.parse(
+  await readFile(join(packageRoot, "package.json"), "utf8"),
+);
 
 async function updateIfOutdated() {
-  const { version: installedVersion } = JSON.parse(
-    await readFile(join(packageRoot, "package.json"), "utf8"),
-  );
+  const { version: installedVersion } = cliPackage;
   const registry = (process.env.npm_config_registry || "https://registry.npmjs.org")
     .replace(/\/$/, "");
 
@@ -400,6 +401,9 @@ try {
       ...(includeServer ? { server: "node scripts/run-app.mjs server" } : {}),
     },
     type: "module",
+    dependencies: {
+      "cross-spawn": cliPackage.dependencies["cross-spawn"],
+    },
   };
   await writeFile(join(root, "package.json"), `${JSON.stringify(rootPackage, null, 2)}\n`);
   await writeFile(

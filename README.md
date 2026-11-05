@@ -13,6 +13,8 @@ Create a Vite app with the official interactive setup. Choose React or any other
 - Node.js 20 or newer
 - npm or pnpm
 
+The commands below work in Windows PowerShell or Command Prompt as well as macOS and Linux terminals. pnpm commands require pnpm to be installed; npm is sufficient.
+
 ## Create a project
 
 With pnpm:
